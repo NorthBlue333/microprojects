@@ -10,7 +10,7 @@ def program():
         request = BeautifulSoup(requests.get(f"https://www.bonnesroutes.com/distance/?from={start}&to={end}").content, 'html.parser')
         error_start, error_end = request.select('.field_errors')[0].select('li'), request.select('.field_errors')[1].select('li')
         if(len(error_start) == 0 and len(error_start) == 0):
-            distance = int(request.select('#total_distance .value')[0].text) * 1000
+            distance = float(request.select('#total_distance .value')[0].text) * 1000
             seconds = (1000/6)
             print(seconds)
             hours = 0
