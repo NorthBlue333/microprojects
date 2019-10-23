@@ -43,7 +43,7 @@ def program():
             if(seconds/60 > 0):
                 if(seconds/3600 > 0):
                     hours = math.floor(seconds/3600)
-                minutes = math.ceil((seconds % 3600)/60) < 10
+                minutes = math.ceil((seconds % 3600)/60)
             print('------------------------------------------------------------------------------------')
             print('Départ :', start.capitalize(), '| Arrivée :', end.capitalize(), '|', distance/1000, 'km | ', "{}:{}".format(hours, minutes), "(dont {} minutes de pause)".format(nb_pause * 15))
             print('------------------------------------------------------------------------------------')
