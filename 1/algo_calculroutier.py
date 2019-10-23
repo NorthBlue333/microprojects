@@ -8,9 +8,10 @@ def program():
 
     if(start != end):
         request = BeautifulSoup(requests.get(f"https://www.bonnesroutes.com/distance/?from={start}&to={end}").content, 'html.parser')
+        error_msg = request.select('.message_error')
         error_start, error_end = request.select('.field_errors')[0].select('li'), request.select('.field_errors')[1].select('li')
-        if(len(error_start) == 0 and len(error_start) == 0):
-            distance = int(request.select('#total_distance .value')[0].text) * 1000
+        if(len(error_start) == 0 and len(error_start) == 0 and len(error_msg) == 0):
+            distance = float(''.join(list(filter(str.isdigit, request.select('#total_distance .value')[0].text)))) * 1000
             done = 0
             seconds = 0
             speed = 0
@@ -42,13 +43,14 @@ def program():
             if(seconds/60 > 0):
                 if(seconds/3600 > 0):
                     hours = math.floor(seconds/3600)
-                minutes = math.ceil((seconds % 3600)/60)
-
+                minutes = math.ceil((seconds % 3600)/60) < 10
             print('------------------------------------------------------------------------------------')
             print('Départ :', start.capitalize(), '| Arrivée :', end.capitalize(), '|', distance/1000, 'km | ', "{}:{}".format(hours, minutes), "(dont {} minutes de pause)".format(nb_pause * 15))
             print('------------------------------------------------------------------------------------')
             return 0
         else:
+            if(len(error_msg) > 0):
+                print(error_msg[0].text)
             if(len(error_start) > 0):
                 print(f"Erreur pour la ville de départ ({start}) : {error_start[0].text}")
             if(len(error_end) > 0):
